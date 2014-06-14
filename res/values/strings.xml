@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TrainingAnalyse</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_store">store data</string>
+    <string name="button_show">show data</string>
+    <string name="title_activity_display_store_data">Store your Data</string>
+
+
+</resources>
