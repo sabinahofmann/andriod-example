@@ -1,9 +1,13 @@
 package de.hofmanns.traininganalyse;
 
+import de.hofmanns.traininganalyse.databse.FeedReaderContract.Training;
+import de.hofmanns.traininganalyse.databse.FeedReaderDbHelper;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,17 +22,40 @@ public class DisplayStoreDataActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Get the message from the intent
-	    Intent intent = getIntent();
+		//to access database
+		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(getBaseContext());
 
+		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-	    // Create the text view
-	    TextView textView = new TextView(this);
-	    textView.setTextSize(40);
-	    textView.setText("TEST");
+		// Define a projection that specifies which columns from the database
+		// you will actually use after this query.
+		String[] projection = {
+		    Training._ID,
+		    Training.COLUMN_NAME,
+		    Training.COLUMN_AMOUNT,
+		    Training.COLUMN_CREATED_AT
+		    };
+
+		// How you want the results sorted in the resulting Cursor
+		String sortOrder =
+				Training.COLUMN_NAME + " DESC";
+
+		Cursor c = db.query(
+			Training.TABLE_NAME,  // The table to query
+		    projection,                               // The columns to return
+		    selection,                                // The columns for the WHERE clause
+		    selectionArgs,                            // The values for the WHERE clause
+		    null,                                     // don't group the rows
+		    null,                                     // don't filter by row groups
+		    sortOrder                                 // The sort order
+		    );
+
+	    // Create the List view
+	    TextView listView = new TextView(this);
+
 
 	    // Set the text view as the activity layout
-	    setContentView(textView);
+	    setContentView(listView);
 
 	}
 
