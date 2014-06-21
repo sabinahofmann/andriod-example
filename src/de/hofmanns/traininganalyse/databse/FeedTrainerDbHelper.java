@@ -1,39 +1,46 @@
 package de.hofmanns.traininganalyse.databse;
 
-import de.hofmanns.traininganalyse.databse.FeedReaderContract.Training;
+//import de.hofmanns.traininganalyse.databse.FeedTrainerContract.Training;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class FeedReaderDbHelper extends SQLiteOpenHelper {
-
+public class FeedTrainerDbHelper extends SQLiteOpenHelper {
+	
+	public static final String COLUMN_ID = "_id";
+	public static final String TABLE_NAME = "training";
+	public static final String COLUMN_NAME = "practice_type";
+	public static final String COLUMN_AMOUNT = "amount";
+	public static final String COLUMN_RATES = "rates";
+	public static final String COLUMN_CREATED_AT = "created_at";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String INT_TYPE = " INTEGER";
 	private static final String DATE_TYPE = " DATE";
 	private static final String COMMA_SEP = ",";
-	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
-			+ Training.TABLE_NAME + " (" + Training._ID
-			+ " INTEGER PRIMARY KEY," + Training.COLUMN_NAME + TEXT_TYPE
-			+ COMMA_SEP + Training.COLUMN_AMOUNT + INT_TYPE + COMMA_SEP
-			+ Training.COLUMN_CREATED_AT + DATE_TYPE + ")";
+	private static final String DATABASE_CREATE  = "CREATE TABLE "
+			+ TABLE_NAME + " (" + COLUMN_ID
+			+ " INTEGER PRIMARY KEY," + COLUMN_NAME + TEXT_TYPE
+			+ COMMA_SEP + COLUMN_AMOUNT + INT_TYPE + COMMA_SEP
+			+ COMMA_SEP + COLUMN_RATES + INT_TYPE + COMMA_SEP
+			+ COLUMN_CREATED_AT + DATE_TYPE + ")";
 
-	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "
-			+ Training.TABLE_NAME;
+	private static final String DELETE_DATABASE = "DROP TABLE IF EXISTS "
+			+ TABLE_NAME;
 	
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "trainer.db";
 
-    public FeedReaderDbHelper(Context context) {
+    public FeedTrainerDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(DATABASE_CREATE);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL(DELETE_DATABASE);
         onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
