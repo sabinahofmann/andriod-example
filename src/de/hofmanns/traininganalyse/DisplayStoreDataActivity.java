@@ -5,8 +5,11 @@ import java.util.Random;
 
 import de.hofmanns.traininganalyse.databse.TrainerDataSource;
 import de.hofmanns.traininganalyse.databse.Training;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,9 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class DisplayStoreDataActivity extends ListActivity {
 	private TrainerDataSource datasource;
+	private EditText editTextMainScreen;
+	final Context context = this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +89,46 @@ public class DisplayStoreDataActivity extends ListActivity {
 		Training trainig = null;
 		switch (view.getId()) {
 		case R.id.add:
-			String[] trainigs = new String[] { "Cool", "Very nice", "Hate it", "Hi" };
-			int nextInt = new Random().nextInt(4);
-			// save the new comment to the database
-			trainig = datasource.createTraining(trainigs[nextInt], nextInt,
-					nextInt, null);
-			adapter.add(trainig);
+			/*
+			 * String[] trainigs = new String[] { "Cool", "Very nice",
+			 * "Hate it", "Hi" }; int nextInt = new Random().nextInt(4); // save
+			 * the new comment to the database trainig =
+			 * datasource.createTraining(trainigs[nextInt], nextInt, nextInt,
+			 * null); adapter.add(trainig);
+			 */
+
+			// get prompts.xml view
+			LayoutInflater layoutInflater = LayoutInflater.from(context);
+			View promptView = layoutInflater.inflate(R.layout.promts, null);
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					context);
+			// set prompts.xml to be the layout file of the alertdialog builder
+			alertDialogBuilder.setView(promptView);
+			final EditText input = (EditText) promptView
+					.findViewById(R.id.userInput);
+			// setup a dialog window
+			alertDialogBuilder
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// get user input and set it to result
+									editTextMainScreen.setText(input.getText());
+								}
+							})
+					.setNegativeButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+
+			// create an alert dialog
+			AlertDialog alertD = alertDialogBuilder.create();
+			alertD.show();
+
 			break;
 		case R.id.delete:
 			if (getListAdapter().getCount() > 0) {
