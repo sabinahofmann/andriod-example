@@ -7,8 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class FeedTrainerDbHelper extends SQLiteOpenHelper {
 	
+	// define the database
 	public static final String COLUMN_ID = "_id";
-	public static final String TABLE_NAME = "training";
+	public static final String TABLE_NAME = "trainings";
 	public static final String COLUMN_NAME = "practice_type";
 	public static final String COLUMN_AMOUNT = "amount";
 	public static final String COLUMN_RATES = "rates";
@@ -17,19 +18,22 @@ public class FeedTrainerDbHelper extends SQLiteOpenHelper {
 	private static final String INT_TYPE = " INTEGER";
 	private static final String DATE_TYPE = " DATE";
 	private static final String COMMA_SEP = ",";
+	
+	// If you change the database schema, you must increment the database version.
+	public static final int DATABASE_VERSION = 1;
+	public static final String DATABASE_NAME = "trainesr.db";
+	
+	 // Database creation sql statement
 	private static final String DATABASE_CREATE  = "CREATE TABLE "
 			+ TABLE_NAME + " (" + COLUMN_ID
-			+ " INTEGER PRIMARY KEY," + COLUMN_NAME + TEXT_TYPE
-			+ COMMA_SEP + COLUMN_AMOUNT + INT_TYPE + COMMA_SEP
-			+ COMMA_SEP + COLUMN_RATES + INT_TYPE + COMMA_SEP
-			+ COLUMN_CREATED_AT + DATE_TYPE + ")";
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NAME + TEXT_TYPE
+			+ COMMA_SEP + COLUMN_AMOUNT + INT_TYPE 
+			+ COMMA_SEP + COLUMN_RATES + INT_TYPE
+			+ COMMA_SEP + COLUMN_CREATED_AT + DATE_TYPE + ")";
 
 	private static final String DELETE_DATABASE = "DROP TABLE IF EXISTS "
 			+ TABLE_NAME;
 	
-    // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "trainer.db";
 
     public FeedTrainerDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,7 +47,7 @@ public class FeedTrainerDbHelper extends SQLiteOpenHelper {
         db.execSQL(DELETE_DATABASE);
         onCreate(db);
     }
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onUpgrade(db, oldVersion, newVersion);
-    }
+//    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//        onUpgrade(db, oldVersion, newVersion);
+//    }
 }

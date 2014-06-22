@@ -50,9 +50,7 @@ public class Training {
 	//used by the ArrayAdapter in the ListView
 	@Override
 	public String toString() {
-		return "Training [id=" + id + ", practice_type=" + practiceType
-				+ ", rates=" + rates + ", amount=" + amount + ", created_at="
-				+ created_at + "]";
+		return practiceType;
 	}
 
 }

@@ -1,7 +1,6 @@
 package de.hofmanns.traininganalyse.databse;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -26,10 +25,6 @@ public class TrainerDataSource {
 
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
-	}
-
-	public void show() throws SQLException {
-		database = dbHelper.getReadableDatabase();
 	}
 
 	public void close() {

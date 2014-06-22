@@ -70,5 +70,13 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 
 	}
+	
+	/** Called when the user clicks the Send button */
+	public void showData(View view) {
+	    // Do something in response to button
+		Intent intent = new Intent(this, DisplayStoreDataActivity.class);
+		startActivity(intent);
+
+	}
 
 }

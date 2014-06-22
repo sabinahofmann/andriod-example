@@ -11,16 +11,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="121dp"
-        android:onClick="storeDate"
-        android:text="@string/button_store" />
+        android:text="@string/button_store" 
+        android:onClick="storeData"/>
 
     <Button
         android:id="@+id/button_show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_store"
         android:layout_centerHorizontal="true"
-        android:onClick="showData"
-        android:text="@string/button_show" />
+        android:text="@string/button_show"
+        android:onClick="showData"  />
 
 </RelativeLayout>

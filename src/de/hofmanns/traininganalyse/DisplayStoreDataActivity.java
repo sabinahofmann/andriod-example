@@ -1,35 +1,39 @@
 package de.hofmanns.traininganalyse;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import de.hofmanns.traininganalyse.databse.FeedTrainerDbHelper;
-import android.app.Activity;
-import android.app.ActionBar;
+import de.hofmanns.traininganalyse.databse.TrainerDataSource;
+import de.hofmanns.traininganalyse.databse.Training;
 import android.app.Fragment;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.os.Build;
+import android.widget.ArrayAdapter;
 
-public class DisplayStoreDataActivity extends Activity {
-	FeedTrainerDbHelper mDbHelper = new FeedTrainerDbHelper(getBaseContext());
+public class DisplayStoreDataActivity extends ListActivity {
+	private TrainerDataSource datasource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 
-		// Set the text view as the activity layout
-		//setContentView(listView);
+		setContentView(R.layout.activity_display_store_data);
+
+		datasource = new TrainerDataSource(this);
+		datasource.open();
+
+		List<Training> values = datasource.getAllTrainings();
+
+		// use the SimpleCursorAdapter to show the
+		// elements in a ListView
+		ArrayAdapter<Training> adapter = new ArrayAdapter<Training>(this,
+				android.R.layout.simple_list_item_1, values);
+		setListAdapter(adapter);
 
 	}
 
@@ -69,10 +73,43 @@ public class DisplayStoreDataActivity extends Activity {
 			return rootView;
 		}
 	}
-	
-	public void onClickItem(){
-		// Gets the data repository in write mode
-		
+
+	// Will be called via the onClick attribute
+	// of the buttons in main.xml
+	public void onClick(View view) {
+		@SuppressWarnings("unchecked")
+		ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
+		Training trainig = null;
+		switch (view.getId()) {
+		case R.id.add:
+			String[] trainigs = new String[] { "Cool", "Very nice", "Hate it", "Hi" };
+			int nextInt = new Random().nextInt(4);
+			// save the new comment to the database
+			trainig = datasource.createTraining(trainigs[nextInt], nextInt,
+					nextInt, null);
+			adapter.add(trainig);
+			break;
+		case R.id.delete:
+			if (getListAdapter().getCount() > 0) {
+				trainig = (Training) getListAdapter().getItem(0);
+				datasource.deleteTraining(trainig);
+				adapter.remove(trainig);
+			}
+			break;
+		}
+		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void onResume() {
+		datasource.open();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		datasource.close();
+		super.onPause();
 	}
 
 }
