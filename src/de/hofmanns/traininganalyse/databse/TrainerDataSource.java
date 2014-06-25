@@ -1,8 +1,10 @@
 package de.hofmanns.traininganalyse.databse;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,13 +33,14 @@ public class TrainerDataSource {
 		dbHelper.close();
 	}
 
-	public Training createTraining(String practice_type, int rates, int amount,
-			String created_at) {
+	@SuppressLint("SimpleDateFormat")
+	public Training createTraining(String practice_type, int rates, int amount) {
 		ContentValues values = new ContentValues();
 		values.put(FeedTrainerDbHelper.COLUMN_NAME, practice_type);
 		values.put(FeedTrainerDbHelper.COLUMN_AMOUNT, amount);
 		values.put(FeedTrainerDbHelper.COLUMN_RATES, rates);
-		values.put(FeedTrainerDbHelper.COLUMN_CREATED_AT, created_at);
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+	    values.put(FeedTrainerDbHelper.COLUMN_CREATED_AT, dateFormat.format(new Date()));
 
 		long insertId = database.insert(FeedTrainerDbHelper.TABLE_NAME, null,
 				values);

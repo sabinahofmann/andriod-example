@@ -6,6 +6,11 @@
     <string name="button_store">store data</string>
     <string name="button_show">show data</string>
     <string name="title_activity_display_store_data">Store your Data</string>
+    
+    <string name="label_practice_type">Practice type</string>
+    <string name="label_amount">Amount</string>
+    <string name="label_rates">Rates</string>
+    <string name="label_created_at">Date</string>
 
 
 </resources>

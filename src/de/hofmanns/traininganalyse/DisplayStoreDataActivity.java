@@ -1,7 +1,6 @@
 package de.hofmanns.traininganalyse;
 
 import java.util.List;
-import java.util.Random;
 
 import de.hofmanns.traininganalyse.databse.TrainerDataSource;
 import de.hofmanns.traininganalyse.databse.Training;
@@ -16,15 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 public class DisplayStoreDataActivity extends ListActivity {
 	private TrainerDataSource datasource;
-	private EditText editTextMainScreen;
 	final Context context = this;
-
+	EditText input_practice_type = null;
+	EditText input_rates = null;
+	EditText input_amount = null;
+	Training trainig = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,11 +39,23 @@ public class DisplayStoreDataActivity extends ListActivity {
 
 		List<Training> values = datasource.getAllTrainings();
 
-		// use the SimpleCursorAdapter to show the
-		// elements in a ListView
+		// use the SimpleCursorAdapter to show the elements in a ListView
 		ArrayAdapter<Training> adapter = new ArrayAdapter<Training>(this,
-				android.R.layout.simple_list_item_1, values);
+				 android.R.layout.simple_list_item_1, values);
 		setListAdapter(adapter);
+		ListView lv = getListView();
+		lv.setClickable(true);
+		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			  @Override
+			  public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+//			    Object o = lv.getItemAtPosition(position);
+			    /* write you handling code like...
+			    String st = "sdcard/";
+			    File f = new File(st+o.toString());
+			    // do whatever u want to do with 'f' File object
+			    */  
+			  }
+			});
 
 	}
 
@@ -85,27 +100,27 @@ public class DisplayStoreDataActivity extends ListActivity {
 	// of the buttons in main.xml
 	public void onClick(View view) {
 		@SuppressWarnings("unchecked")
-		ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
-		Training trainig = null;
+		final ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
 		switch (view.getId()) {
 		case R.id.add:
 			/*
-			 * String[] trainigs = new String[] { "Cool", "Very nice",
-			 * "Hate it", "Hi" }; int nextInt = new Random().nextInt(4); // save
-			 * the new comment to the database trainig =
-			 * datasource.createTraining(trainigs[nextInt], nextInt, nextInt,
-			 * null); adapter.add(trainig);
+			 * adapter.add(trainig);
 			 */
 
 			// get prompts.xml view
 			LayoutInflater layoutInflater = LayoutInflater.from(context);
 			View promptView = layoutInflater.inflate(R.layout.promts, null);
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					context);
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+			
 			// set prompts.xml to be the layout file of the alertdialog builder
 			alertDialogBuilder.setView(promptView);
-			final EditText input = (EditText) promptView
-					.findViewById(R.id.userInput);
+			input_practice_type = (EditText) promptView
+					.findViewById(R.id.input_practice_type);
+			input_rates = (EditText) promptView
+					.findViewById(R.id.input_rates);
+			input_amount = (EditText) promptView
+					.findViewById(R.id.input_amount);
+			
 			// setup a dialog window
 			alertDialogBuilder
 					.setCancelable(false)
@@ -114,7 +129,10 @@ public class DisplayStoreDataActivity extends ListActivity {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									// get user input and set it to result
-									editTextMainScreen.setText(input.getText());
+								trainig=datasource.createTraining(input_practice_type.getText().toString(),
+											Integer.parseInt(input_rates.getText().toString()), 
+											Integer.parseInt(input_amount.getText().toString()));
+								adapter.add(trainig);
 								}
 							})
 					.setNegativeButton("Cancel",
@@ -128,7 +146,6 @@ public class DisplayStoreDataActivity extends ListActivity {
 			// create an alert dialog
 			AlertDialog alertD = alertDialogBuilder.create();
 			alertD.show();
-
 			break;
 		case R.id.delete:
 			if (getListAdapter().getCount() > 0) {
