@@ -4,12 +4,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class TrainerDataSource {
 
@@ -110,5 +112,41 @@ public class TrainerDataSource {
 		training.setRates(cursor.getInt(2));
 		training.setAmount(cursor.getInt(3));
 		return training;
+	}
+	
+	public Training getTraining(int id){
+		String[] columns = { FeedTrainerDbHelper.COLUMN_ID,
+				FeedTrainerDbHelper.COLUMN_NAME,
+				FeedTrainerDbHelper.COLUMN_RATES,
+				FeedTrainerDbHelper.COLUMN_AMOUNT,
+				FeedTrainerDbHelper.COLUMN_CREATED_AT };
+		//build query
+        Cursor cursor = 
+        		database.query(FeedTrainerDbHelper.TABLE_NAME, // a. table
+        				columns, // b. column names
+        		" id = ?", // c. selections 
+                new String[] { String.valueOf(id) }, // d. selections args
+                null, // e. group by
+                null, // f. having
+                null, // g. order by
+                null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // 4. build book object
+        Training training = new Training();
+        training.setId(cursor.getInt(0));
+        training.setPracticeType(cursor.getString(1));
+        training.setRates(cursor.getInt(2));
+        training.setAmount(cursor.getInt(3));
+        training.setCreated_at(null);
+
+        //log 
+        Log.d("getTraining("+id+")", training.toString());
+
+        // 5. return book
+        return training;
 	}
 }

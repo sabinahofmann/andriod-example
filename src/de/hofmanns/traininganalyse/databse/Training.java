@@ -1,5 +1,6 @@
 package de.hofmanns.traininganalyse.databse;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -7,8 +8,12 @@ import java.sql.Date;
  * @author Sabina Hofmann
  *
  */
-public class Training {
+public class Training implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private String practiceType;
 	private int rates;

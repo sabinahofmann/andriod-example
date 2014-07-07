@@ -33,7 +33,6 @@ public class DisplayStoreDataActivity extends ListActivity {
 	Training trainig = null;
 	@SuppressWarnings("unchecked")
 	ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
-	final static String EXTRA_MESSAGE = "edit.list.message";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +61,11 @@ public class DisplayStoreDataActivity extends ListActivity {
 //		         Toast.makeText(DisplayStoreDataActivity.this, "Item with id ["+id+"] - Position ["+position+"] - Planet ["+clickedView.getText()+"]", Toast.LENGTH_SHORT).show();
 //				final String item = (String) parent.getItemAtPosition(position);
 
-				Intent intent = new Intent(DisplayStoreDataActivity.this, ShowDataActivity.class);	
-			    String message = (String) view.getContext().getText(position);
-			    intent.putExtra(EXTRA_MESSAGE, message);
+				Intent intent = new Intent(DisplayStoreDataActivity.this, ShowDataActivity.class);
+//				String item = (String) parent.getItemAtPosition(position);
+			
+//			    String message = (String) view.getContext().getText(position);
+			    intent.putExtra("training", datasource.getTraining((int) id));
 			    startActivity(intent);
 
 			}
