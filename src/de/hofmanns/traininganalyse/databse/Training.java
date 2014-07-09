@@ -55,7 +55,7 @@ public class Training implements Serializable{
 	//used by the ArrayAdapter in the ListView
 	@Override
 	public String toString() {
-		return practiceType;
+		return "Training :"+practiceType+","+rates+","+amount+","+created_at;
 	}
 
 }

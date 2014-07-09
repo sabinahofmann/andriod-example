@@ -124,7 +124,7 @@ public class TrainerDataSource {
         Cursor cursor = 
         		database.query(FeedTrainerDbHelper.TABLE_NAME, // a. table
         				columns, // b. column names
-        		" id = ?", // c. selections 
+        		" _id = ?", // c. selections 
                 new String[] { String.valueOf(id) }, // d. selections args
                 null, // e. group by
                 null, // f. having
@@ -135,7 +135,7 @@ public class TrainerDataSource {
         if (cursor != null)
             cursor.moveToFirst();
 
-        // 4. build book object
+        // 4. build object
         Training training = new Training();
         training.setId(cursor.getInt(0));
         training.setPracticeType(cursor.getString(1));

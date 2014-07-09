@@ -2,6 +2,7 @@ package de.hofmanns.traininganalyse;
 
 import java.util.List;
 
+import de.hofmanns.traininganalyse.databse.FeedTrainerDbHelper;
 import de.hofmanns.traininganalyse.databse.TrainerDataSource;
 import de.hofmanns.traininganalyse.databse.Training;
 import android.app.AlertDialog;
@@ -10,7 +11,9 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,28 +52,27 @@ public class DisplayStoreDataActivity extends ListActivity {
 		ArrayAdapter<Training> adapter = new ArrayAdapter<Training>(this,
 				android.R.layout.simple_list_item_1, values);
 		setListAdapter(adapter);
-		ListView lv = getListView();
-		lv.setClickable(true);
-		lv.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+	}
 
-		         // We know the View is a TextView so we can cast it
-//		         TextView clickedView = (TextView) view;
-//		         Toast.makeText(DisplayStoreDataActivity.this, "Item with id ["+id+"] - Position ["+position+"] - Planet ["+clickedView.getText()+"]", Toast.LENGTH_SHORT).show();
-//				final String item = (String) parent.getItemAtPosition(position);
+	@Override
+	public void onListItemClick(ListView l, View view, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, view, position, id);
+		Log.d("TRAINING", "Selected id =" + id);
 
-				Intent intent = new Intent(DisplayStoreDataActivity.this, ShowDataActivity.class);
-//				String item = (String) parent.getItemAtPosition(position);
-			
-//			    String message = (String) view.getContext().getText(position);
-			    intent.putExtra("training", datasource.getTraining((int) id));
-			    startActivity(intent);
+		trainig = (Training) l.getItemAtPosition(position);
 
-			}
-		});
+		Log.d("TRAINING", "Selected Training = {" + trainig.toString() + " }");
 
+		Intent intent = new Intent(DisplayStoreDataActivity.this,
+				ShowDataActivity.class);
+		// intent.putExtra("t_id", trainig.getId());
+		// intent.putExtra("t_practiceType", trainig.getPracticeType());
+		// intent.putExtra("t_rates", trainig.getRates());
+		// intent.putExtra("t_amountL", trainig.getAmount());
+		// intent.putExtra("t_date", trainig.getCreated_at());
+		intent.putExtra("training", trainig.toString());
+		startActivity(intent);
 	}
 
 	@Override
@@ -111,7 +113,8 @@ public class DisplayStoreDataActivity extends ListActivity {
 
 	// Will be called via the onClick attribute of the buttons in main.xml
 	public void onClick(View view) {
-//		final ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
+		// final ArrayAdapter<Training> adapter = (ArrayAdapter<Training>)
+		// getListAdapter();
 		switch (view.getId()) {
 		case R.id.add:
 			// get prompts.xml view
