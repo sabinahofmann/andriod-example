@@ -1,19 +1,16 @@
 package de.hofmanns.traininganalyse;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import de.hofmanns.traininganalyse.databse.FeedTrainerDbHelper;
-import de.hofmanns.traininganalyse.databse.TrainerDataSource;
-import de.hofmanns.traininganalyse.databse.Training;
+import de.hofmanns.traininganalyse.R;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +23,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.hofmanns.traininganalyse.databse.TrainerDataSource;
+import de.hofmanns.traininganalyse.databse.Training;
+
+
 
 public class DisplayStoreDataActivity extends ListActivity {
 	private TrainerDataSource datasource;
@@ -37,42 +38,145 @@ public class DisplayStoreDataActivity extends ListActivity {
 	@SuppressWarnings("unchecked")
 	ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
 
+	private TrainingAdapter dataAdapter = null;
+	private View currentView = null;
+
+	private static final int TRAINING_EDIT = 1;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_display_store_data);
+		// Generate list View from ArrayList
+		displayListView();
+
+	}
+
+	private void displayListView() {
 
 		datasource = new TrainerDataSource(this);
 		datasource.open();
 
-		List<Training> values = datasource.getAllTrainings();
+		ArrayList<Training> values = datasource.getAllTrainings();
 
 		// use the SimpleCursorAdapter to show the elements in a ListView
-		ArrayAdapter<Training> adapter = new ArrayAdapter<Training>(this,
-				android.R.layout.simple_list_item_1, values);
-		setListAdapter(adapter);
+		// ArrayAdapter<Training> adapter = new ArrayAdapter<Training>(this,
+		// android.R.layout.simple_list_item_1, values);
+		// setListAdapter(adapter);
+
+		// create an ArrayAdaptar from the String Array
+		dataAdapter = new TrainingAdapter(this, R.layout.row_data, values);
+		ListView listView = (ListView) findViewById(R.id.list);
+		// Assign adapter to ListView
+		listView.setAdapter(dataAdapter);
+
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				currentView = view;
+
+				// get reference to the training Object
+				Training training = (Training) view.getTag();
+				Toast.makeText(getApplicationContext(),
+						training.getPracticeType(), Toast.LENGTH_SHORT).show();
+
+				Intent intent = new Intent(DisplayStoreDataActivity.this,
+						ShowDataActivity.class);
+				Bundle b = new Bundle();
+				// pass the country object as a parcel
+				b.putParcelable("training", training);
+				intent.putExtras(b);
+				startActivityForResult(intent, TRAINING_EDIT);
+
+			}
+		});
+
 	}
 
+	// @Override
+	// public void onListItemClick(ListView l, View view, int position, long id)
+	// {
+	// // TODO Auto-generated method stub
+	// super.onListItemClick(l, view, position, id);
+	// Log.d("TRAINING", "Selected id =" + id);
+	// trainig = (Training) l.getItemAtPosition(position);
+	// Log.d("TRAINING", "Selected Training = {" + trainig.toString() + " }");
+	// Intent intent = new Intent(DisplayStoreDataActivity.this,
+	// ShowDataActivity.class);
+	// // intent.putExtra("t_id", trainig.getId());
+	// // intent.putExtra("t_practiceType", trainig.getPracticeType());
+	// // intent.putExtra("t_rates", trainig.getRates());
+	// // intent.putExtra("t_amountL", trainig.getAmount());
+	// // intent.putExtra("t_date", trainig.getCreated_at());
+	// intent.putExtra("training", trainig.toString());
+	// startActivity(intent);
+	// }
+
 	@Override
-	public void onListItemClick(ListView l, View view, int position, long id) {
-		// TODO Auto-generated method stub
-		super.onListItemClick(l, view, position, id);
-		Log.d("TRAINING", "Selected id =" + id);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		trainig = (Training) l.getItemAtPosition(position);
+		switch (requestCode) {
 
-		Log.d("TRAINING", "Selected Training = {" + trainig.toString() + " }");
+		case TRAINING_EDIT:
+			if (resultCode == RESULT_OK) {
 
-		Intent intent = new Intent(DisplayStoreDataActivity.this,
-				ShowDataActivity.class);
-		// intent.putExtra("t_id", trainig.getId());
-		// intent.putExtra("t_practiceType", trainig.getPracticeType());
-		// intent.putExtra("t_rates", trainig.getRates());
-		// intent.putExtra("t_amountL", trainig.getAmount());
-		// intent.putExtra("t_date", trainig.getCreated_at());
-		intent.putExtra("training", trainig.toString());
-		startActivity(intent);
+				// read the bundle and get the country object
+				Bundle bundle = data.getExtras();
+				Training training = bundle.getParcelable("training");
+
+				// update the country object in the ArrayAdapter
+				int listPosition = training.getListPosition();
+				dataAdapter.setTraining(training, listPosition);
+
+				// update the country name in the ListView
+				currentView.setTag(training);
+				TextView name = (TextView) currentView.findViewById(R.id.name);
+				name.setText(training.getPracticeType());
+			}
+			break;
+		}
+	}
+
+	private class TrainingAdapter extends ArrayAdapter<Training> {
+
+		private ArrayList<Training> trainingList;
+
+		public TrainingAdapter(Context context, int textViewResourceId,
+				ArrayList<Training> trainingList) {
+
+			super(context, textViewResourceId, trainingList);
+			this.trainingList = new ArrayList<Training>();
+			this.trainingList.addAll(trainingList);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			TextView code = null;
+			TextView name = null;
+
+			if (convertView == null) {
+				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = vi.inflate(R.layout.row_data, null);
+
+				code = (TextView) convertView.findViewById(R.id.code);
+				name = (TextView) convertView.findViewById(R.id.name);
+			}
+
+			Training training = trainingList.get(position);
+			training.setListPosition(position);
+			code.setText(training.getPracticeType());
+			name.setText(training.getRates());
+			convertView.setTag(training);
+
+			return convertView;
+		}
+
+		public void setTraining(Training training, int position) {
+			this.trainingList.set(position, training);
+		}
+
 	}
 
 	@Override
@@ -81,6 +185,7 @@ public class DisplayStoreDataActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.display_store_data, menu);
 		return true;
 	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

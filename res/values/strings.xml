@@ -12,5 +12,6 @@
     <string name="label_created_at">Date</string>
     <string name="title_activity_show_data">ShowDataActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_testmain">TESTMainActivity</string>
 
 </resources>

@@ -68,8 +68,8 @@ public class TrainerDataSource {
 
 	}
 
-	public List<Training> getAllTrainings() {
-		List<Training> trainings = new ArrayList<Training>();
+	public ArrayList<Training> getAllTrainings() {
+		ArrayList<Training> trainings = new ArrayList<Training>();
 
 		// Define a projection that specifies which columns from the database
 		// you will actually use after this query.
@@ -106,7 +106,7 @@ public class TrainerDataSource {
 	}
 
 	private Training cursorToTraining(Cursor cursor) {
-		Training training = new Training();
+		Training training = new Training(null);
 		training.setId(cursor.getLong(0));
 		training.setPracticeType(cursor.getString(1));
 		training.setRates(cursor.getInt(2));
@@ -136,7 +136,7 @@ public class TrainerDataSource {
             cursor.moveToFirst();
 
         // 4. build object
-        Training training = new Training();
+        Training training = new Training(null);
         training.setId(cursor.getInt(0));
         training.setPracticeType(cursor.getString(1));
         training.setRates(cursor.getInt(2));

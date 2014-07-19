@@ -38,6 +38,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.hofmanns.traininganalyse.DisplayStoreDataActivity" />
         </activity>
+        <activity
+            android:name="de.hofmanns.traininganalyse.TESTMainActivity"
+            android:label="@string/title_activity_testmain" >
+        </activity>
     </application>
 
 </manifest>
