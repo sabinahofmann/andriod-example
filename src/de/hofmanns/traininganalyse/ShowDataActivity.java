@@ -22,7 +22,7 @@ import android.os.Build;
 public class ShowDataActivity extends Activity implements OnClickListener {
 
 	private Training training;
-	private TextView code;
+	private TextView type;
 	private EditText practiceType, rates, amount, created_at;
 
 	@Override
@@ -32,23 +32,29 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 
 		Bundle bundle = this.getIntent().getExtras();
 		training = bundle.getParcelable("training");
-		Log.d("SHOW DATA", "training"+training);
+		Log.d("SHOW DATA", "training "+training);
 
 		Button save = (Button) findViewById(R.id.save);
 		Button cancel = (Button) findViewById(R.id.cancel);
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
 
+		Log.d("SHOW DATA", "set buttons");
+		type  = (TextView)findViewById(R.id.type);		
 		practiceType = (EditText) findViewById(R.id.practiceType);
 		rates = (EditText) findViewById(R.id.rates);
 		amount = (EditText) findViewById(R.id.amount);
 		created_at = (EditText) findViewById(R.id.created_at);
 
+		Log.d("SHOW DATA", "find r.id.xy");
+		
+		type.setText(training.getPracticeType());
 		practiceType.setText(training.getPracticeType());
-		rates.setText(training.getRates());
-		amount.setText(training.getAmount());
+		rates.setText(String.valueOf(training.getRates()));
+		amount.setText(String.valueOf(training.getAmount()));
 		created_at.setText(training.getCreated_at());
 
+		Log.d("SHOW DATA", "setText");
 	}
 
 	public void onClick(View v) {
