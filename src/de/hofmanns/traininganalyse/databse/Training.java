@@ -19,6 +19,20 @@ public class Training implements Parcelable {
 	private int amount;
 	private String created_at;
 	int listPosition = 0;
+	
+	
+	public Training() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Training(String practiceType, int rates, int amount,
+			String created_at) {
+		super();
+		this.practiceType = practiceType;
+		this.rates = rates;
+		this.amount = amount;
+		this.created_at = created_at;
+	}
 
 	public long getId() {
 		return id;
@@ -110,5 +124,6 @@ public class Training implements Parcelable {
 		this.created_at = in.readString();
 		this.listPosition = in.readInt();
 	}
+
 
 }

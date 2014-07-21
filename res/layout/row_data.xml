@@ -1,24 +1,27 @@
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayStoreDataActivity" >
+    tools:context=".DisyplayStoreDataActivity" >
 
     <TextView
-        android:id="@+id/code"
+        android:id="@+id/practice_type"
         android:layout_width="50sp"
         android:layout_height="wrap_content"
-        android:text="Code"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Practice Type"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/rates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
-        android:text="Name: "
+        android:layout_toRightOf="@+id/practice_type"
+        android:text="Rates: "
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</RelativeLayout >
+</RelativeLayout>

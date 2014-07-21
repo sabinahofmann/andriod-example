@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="de.hofmanns.traininganalyse.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,24 +23,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="de.hofmanns.traininganalyse.DisplayStoreDataActivity"
+            android:name=".DisplayStoreDataActivity"
             android:label="@string/title_activity_display_store_data"
-            android:parentActivityName="de.hofmanns.traininganalyse.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.hofmanns.traininganalyse.MainActivity" />
         </activity>
         <activity
-            android:name="de.hofmanns.traininganalyse.ShowDataActivity"
+            android:name=".ShowDataActivity"
             android:label="@string/title_activity_show_data"
-            android:parentActivityName="de.hofmanns.traininganalyse.DisplayStoreDataActivity" >
+            android:parentActivityName=".DisplayStoreDataActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.hofmanns.traininganalyse.DisplayStoreDataActivity" />
         </activity>
         <activity
-            android:name="de.hofmanns.traininganalyse.TESTMainActivity"
+            android:name=".TESTMainActivity"
             android:label="@string/title_activity_testmain" >
+        </activity>
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.hofmanns.traininganalyse.MainActivity" />
         </activity>
     </application>
 

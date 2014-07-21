@@ -1,16 +1,17 @@
 package de.hofmanns.traininganalyse;
 
+//import android.R;
 import java.util.ArrayList;
-
-import de.hofmanns.traininganalyse.R;
-
+import android.annotation.SuppressLint;
+//import de.hofmanns.traininganalyse.R;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,19 +27,16 @@ import android.widget.Toast;
 import de.hofmanns.traininganalyse.databse.TrainerDataSource;
 import de.hofmanns.traininganalyse.databse.Training;
 
-
-
-public class DisplayStoreDataActivity extends ListActivity {
+public class DisplayStoreDataActivity extends Activity {
 	private TrainerDataSource datasource;
 	final Context context = this;
 	EditText input_practice_type = null;
 	EditText input_rates = null;
 	EditText input_amount = null;
-	Training trainig = null;
-	@SuppressWarnings("unchecked")
-	ArrayAdapter<Training> adapter = (ArrayAdapter<Training>) getListAdapter();
+	Training training = null;
 
-	private TrainingAdapter dataAdapter = null;
+	// private TrainingAdapter dataAdapter = null;
+	private ArrayAdapter<Training> dataAdapter = null;
 	private View currentView = null;
 
 	private static final int TRAINING_EDIT = 1;
@@ -47,47 +45,51 @@ public class DisplayStoreDataActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_store_data);
-		// Generate list View from ArrayList
-		displayListView();
-
-	}
-
-	private void displayListView() {
 
 		datasource = new TrainerDataSource(this);
+		Log.d("ON CREATE", "datasource");
 		datasource.open();
+		Log.d("ON CREATE", "datasource open");
 
-		ArrayList<Training> values = datasource.getAllTrainings();
-
-		// use the SimpleCursorAdapter to show the elements in a ListView
-		// ArrayAdapter<Training> adapter = new ArrayAdapter<Training>(this,
-		// android.R.layout.simple_list_item_1, values);
-		// setListAdapter(adapter);
+		ArrayList<Training> trainingList = new ArrayList<Training>();
+		Training training = new Training("Hintern", 10, 3, null);
+		trainingList.add(training);
+		training = new Training("Arme", 13, 4, null);
+		trainingList.add(training);
 
 		// create an ArrayAdaptar from the String Array
-		dataAdapter = new TrainingAdapter(this, R.layout.row_data, values);
-		ListView listView = (ListView) findViewById(R.id.list);
+		 dataAdapter = new TrainingAdapter(this,
+		 trainingList);
+
+		ListView listView = (ListView) findViewById(R.id.listView1);
+		Log.d("ON CREATE", "listView " + listView);
 		// Assign adapter to ListView
 		listView.setAdapter(dataAdapter);
+		Log.d("ON CREATE", "setAdapter");
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
 				currentView = view;
+				 
 
 				// get reference to the training Object
 				Training training = (Training) view.getTag();
+				Log.d("TRAINING", "Selected Training = {" + training.toString() + " }");
 				Toast.makeText(getApplicationContext(),
 						training.getPracticeType(), Toast.LENGTH_SHORT).show();
 
 				Intent intent = new Intent(DisplayStoreDataActivity.this,
 						ShowDataActivity.class);
+				Log.d("TRAINING", "intent");
 				Bundle b = new Bundle();
-				// pass the country object as a parcel
+				// pass the training object as a parcel
 				b.putParcelable("training", training);
+				Log.d("TRAINING", " pass the training object as a parcel");
 				intent.putExtras(b);
 				startActivityForResult(intent, TRAINING_EDIT);
+				Log.d("TRAINING", "startActivityForResult");
 
 			}
 		});
@@ -127,57 +129,18 @@ public class DisplayStoreDataActivity extends ListActivity {
 
 				// update the country object in the ArrayAdapter
 				int listPosition = training.getListPosition();
-				dataAdapter.setTraining(training, listPosition);
+				// dataAdapter.setTraining(training, listPosition);
 
 				// update the country name in the ListView
 				currentView.setTag(training);
-				TextView name = (TextView) currentView.findViewById(R.id.name);
-				name.setText(training.getPracticeType());
+				TextView parctice_type = (TextView) currentView
+						.findViewById(R.id.practice_type);
+				parctice_type.setText(training.getPracticeType());
 			}
 			break;
 		}
 	}
 
-	private class TrainingAdapter extends ArrayAdapter<Training> {
-
-		private ArrayList<Training> trainingList;
-
-		public TrainingAdapter(Context context, int textViewResourceId,
-				ArrayList<Training> trainingList) {
-
-			super(context, textViewResourceId, trainingList);
-			this.trainingList = new ArrayList<Training>();
-			this.trainingList.addAll(trainingList);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-
-			TextView code = null;
-			TextView name = null;
-
-			if (convertView == null) {
-				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				convertView = vi.inflate(R.layout.row_data, null);
-
-				code = (TextView) convertView.findViewById(R.id.code);
-				name = (TextView) convertView.findViewById(R.id.name);
-			}
-
-			Training training = trainingList.get(position);
-			training.setListPosition(position);
-			code.setText(training.getPracticeType());
-			name.setText(training.getRates());
-			convertView.setTag(training);
-
-			return convertView;
-		}
-
-		public void setTraining(Training training, int position) {
-			this.trainingList.set(position, training);
-		}
-
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,7 +148,6 @@ public class DisplayStoreDataActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.display_store_data, menu);
 		return true;
 	}
-	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -202,24 +164,25 @@ public class DisplayStoreDataActivity extends ListActivity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(
-					R.layout.fragment_display_store_data, container, false);
-			return rootView;
-		}
-	}
+	// public static class PlaceholderFragment extends Fragment {
+	//
+	// public PlaceholderFragment() {
+	// }
+	//
+	// @Override
+	// public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	// Bundle savedInstanceState) {
+	// View rootView = inflater.inflate(
+	// R.layout.activity_display_store_data, container, false);
+	// return rootView;
+	// }
+	// }
 
 	// Will be called via the onClick attribute of the buttons in main.xml
 	public void onClick(View view) {
 		// final ArrayAdapter<Training> adapter = (ArrayAdapter<Training>)
 		// getListAdapter();
+
 		switch (view.getId()) {
 		case R.id.add:
 			// get prompts.xml view
@@ -244,7 +207,7 @@ public class DisplayStoreDataActivity extends ListActivity {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									// get user input and set it to result
-									trainig = datasource.createTraining(
+									training = datasource.createTraining(
 											input_practice_type.getText()
 													.toString(), Integer
 													.parseInt(input_rates
@@ -252,7 +215,7 @@ public class DisplayStoreDataActivity extends ListActivity {
 															.toString()),
 											Integer.parseInt(input_amount
 													.getText().toString()));
-									adapter.add(trainig);
+									dataAdapter.add(training);
 								}
 							})
 					.setNegativeButton("Cancel",
@@ -268,14 +231,15 @@ public class DisplayStoreDataActivity extends ListActivity {
 			alertD.show();
 			break;
 		case R.id.delete:
-			if (getListAdapter().getCount() > 0) {
-				trainig = (Training) getListAdapter().getItem(0);
-				datasource.deleteTraining(trainig);
-				adapter.remove(trainig);
-			}
+			// if (getListAdapter().getCount() > 0) {
+			// training = (Training) getListAdapter().getItem(0);
+			// training = get
+			// datasource.deleteTraining(training);
+			// dataAdapter.remove(training);
+			// }
 			break;
 		}
-		adapter.notifyDataSetChanged();
+		dataAdapter.notifyDataSetChanged();
 	}
 
 	@Override
