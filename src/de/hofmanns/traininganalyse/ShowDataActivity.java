@@ -39,14 +39,13 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
 
-		Log.d("SHOW DATA", "set buttons");
+
 		type  = (TextView)findViewById(R.id.type);		
 		practiceType = (EditText) findViewById(R.id.practiceType);
 		rates = (EditText) findViewById(R.id.rates);
 		amount = (EditText) findViewById(R.id.amount);
 		created_at = (EditText) findViewById(R.id.created_at);
 
-		Log.d("SHOW DATA", "find r.id.xy");
 		
 		type.setText(training.getPracticeType());
 		practiceType.setText(training.getPracticeType());

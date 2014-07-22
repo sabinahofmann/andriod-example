@@ -25,9 +25,10 @@ public class Training implements Parcelable {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Training(String practiceType, int rates, int amount,
+	public Training(long id, String practiceType, int rates, int amount,
 			String created_at) {
 		super();
+		this.id=id;
 		this.practiceType = practiceType;
 		this.rates = rates;
 		this.amount = amount;

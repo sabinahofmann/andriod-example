@@ -49,13 +49,15 @@ public class DisplayStoreDataActivity extends Activity {
 		datasource = new TrainerDataSource(this);
 		Log.d("ON CREATE", "datasource");
 		datasource.open();
-		Log.d("ON CREATE", "datasource open");
 
-		ArrayList<Training> trainingList = new ArrayList<Training>();
-		Training training = new Training("Hintern", 10, 3, null);
-		trainingList.add(training);
-		training = new Training("Arme", 13, 4, null);
-		trainingList.add(training);
+//		ArrayList<Training> trainingList = new ArrayList<Training>();
+//		Training training = new Training("Hintern", 10, 3, null);
+//		trainingList.add(training);
+//		training = new Training("Arme", 13, 4, null);
+//		trainingList.add(training);
+		
+		ArrayList<Training> trainingList = datasource.getAllTrainings();
+		Log.d("ON CREATE", "trainingList");
 
 		// create an ArrayAdaptar from the String Array
 		 dataAdapter = new TrainingAdapter(this,
@@ -96,24 +98,6 @@ public class DisplayStoreDataActivity extends Activity {
 
 	}
 
-	// @Override
-	// public void onListItemClick(ListView l, View view, int position, long id)
-	// {
-	// // TODO Auto-generated method stub
-	// super.onListItemClick(l, view, position, id);
-	// Log.d("TRAINING", "Selected id =" + id);
-	// trainig = (Training) l.getItemAtPosition(position);
-	// Log.d("TRAINING", "Selected Training = {" + trainig.toString() + " }");
-	// Intent intent = new Intent(DisplayStoreDataActivity.this,
-	// ShowDataActivity.class);
-	// // intent.putExtra("t_id", trainig.getId());
-	// // intent.putExtra("t_practiceType", trainig.getPracticeType());
-	// // intent.putExtra("t_rates", trainig.getRates());
-	// // intent.putExtra("t_amountL", trainig.getAmount());
-	// // intent.putExtra("t_date", trainig.getCreated_at());
-	// intent.putExtra("training", trainig.toString());
-	// startActivity(intent);
-	// }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

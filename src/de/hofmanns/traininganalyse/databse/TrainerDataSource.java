@@ -97,6 +97,7 @@ public class TrainerDataSource {
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Training training = cursorToTraining(cursor);
+			Log.d("ON CREATE", "training practice_type and rates ");
 			trainings.add(training);
 			cursor.moveToNext();
 		}
@@ -106,11 +107,9 @@ public class TrainerDataSource {
 	}
 
 	private Training cursorToTraining(Cursor cursor) {
-		Training training = new Training(null);
-		training.setId(cursor.getLong(0));
-		training.setPracticeType(cursor.getString(1));
-		training.setRates(cursor.getInt(2));
-		training.setAmount(cursor.getInt(3));
+		Training training = new Training(cursor.getLong(0),
+				cursor.getString(1),cursor.getInt(2),cursor.getInt(3),
+				cursor.getString(4));
 		return training;
 	}
 	
@@ -136,12 +135,10 @@ public class TrainerDataSource {
             cursor.moveToFirst();
 
         // 4. build object
-        Training training = new Training(null);
-        training.setId(cursor.getInt(0));
-        training.setPracticeType(cursor.getString(1));
-        training.setRates(cursor.getInt(2));
-        training.setAmount(cursor.getInt(3));
-        training.setCreated_at(null);
+        Training training = new Training(cursor.getLong(0),
+				cursor.getString(1),cursor.getInt(2),cursor.getInt(3),
+				cursor.getString(4));
+
 
         //log 
         Log.d("getTraining("+id+")", training.toString());
