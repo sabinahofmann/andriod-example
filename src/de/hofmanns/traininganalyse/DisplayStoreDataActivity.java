@@ -2,6 +2,8 @@ package de.hofmanns.traininganalyse;
 
 //import android.R;
 import java.util.ArrayList;
+import java.util.Date;
+
 import android.annotation.SuppressLint;
 //import de.hofmanns.traininganalyse.R;
 import android.app.Activity;
@@ -110,7 +112,10 @@ public class DisplayStoreDataActivity extends Activity {
 				// read the bundle and get the country object
 				Bundle bundle = data.getExtras();
 				Training training = bundle.getParcelable("training");
-
+				datasource.open();
+				datasource.updateTraining(training);
+				datasource.close();
+				Log.d("UPDATE TRAINING", "update training");
 				// update the country object in the ArrayAdapter
 				int listPosition = training.getListPosition();
 				// dataAdapter.setTraining(training, listPosition);
@@ -198,7 +203,8 @@ public class DisplayStoreDataActivity extends Activity {
 															.getText()
 															.toString()),
 											Integer.parseInt(input_amount
-													.getText().toString()));
+													.getText().toString()),
+													new Date().toString());
 									dataAdapter.add(training);
 								}
 							})
