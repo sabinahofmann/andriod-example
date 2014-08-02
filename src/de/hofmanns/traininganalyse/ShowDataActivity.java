@@ -22,8 +22,8 @@ import android.os.Build;
 public class ShowDataActivity extends Activity implements OnClickListener {
 
 	private Training training;
-	private TextView type;
-	private EditText practiceType, rates, amount, created_at;
+	private TextView type, created_at;
+	private EditText practiceType, rates, amount;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 		practiceType = (EditText) findViewById(R.id.practiceType);
 		rates = (EditText) findViewById(R.id.rates);
 		amount = (EditText) findViewById(R.id.amount);
-		created_at = (EditText) findViewById(R.id.created_at);
+		created_at = (TextView) findViewById(R.id.created_at);
 
 		
 		type.setText(training.getPracticeType());
@@ -72,6 +72,17 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 			b.putParcelable("training", training);
 			intent.putExtras(b);
 			setResult(RESULT_OK, intent);
+			finish();
+			break;
+		
+		case R.id.delete:
+			training.setPracticeType(practiceType.getText().toString());
+			training.setRates(Integer.parseInt(rates.getText().toString()));
+			training.setAmount(Integer.parseInt(amount.getText().toString()));
+			training.setCreated_at(created_at.getText().toString());
+
+			intent.putExtra("training", training);
+			setResult(2, intent);
 			finish();
 			break;
 

@@ -36,15 +36,14 @@ public class TrainerDataSource {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public Training createTraining(String practice_type, int rates, int amount,
-			String date) {
+	public Training createTraining(String practice_type, int rates, int amount) {
 		ContentValues values = new ContentValues();
 		values.put(FeedTrainerDbHelper.COLUMN_NAME, practice_type);
 		values.put(FeedTrainerDbHelper.COLUMN_AMOUNT, amount);
 		values.put(FeedTrainerDbHelper.COLUMN_RATES, rates);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		values.put(FeedTrainerDbHelper.COLUMN_CREATED_AT,
-				dateFormat.format(date));
+				dateFormat.format(new Date()));
 
 		long insertId = database.insert(FeedTrainerDbHelper.TABLE_NAME, null,
 				values);
@@ -73,8 +72,8 @@ public class TrainerDataSource {
 		values.put(FeedTrainerDbHelper.COLUMN_NAME, training.getPracticeType());
 		values.put(FeedTrainerDbHelper.COLUMN_AMOUNT, training.getAmount());
 		values.put(FeedTrainerDbHelper.COLUMN_RATES, training.getRates());
-		values.put(FeedTrainerDbHelper.COLUMN_CREATED_AT,
-				training.getCreated_at());
+//		values.put(FeedTrainerDbHelper.COLUMN_CREATED_AT,
+//				training.getCreated_at());
 
 		int update = database.update(FeedTrainerDbHelper.TABLE_NAME, values, // column/value
 				"_id = ?", // selections

@@ -42,6 +42,7 @@ public class DisplayStoreDataActivity extends Activity {
 	private View currentView = null;
 
 	private static final int TRAINING_EDIT = 1;
+	private final int TRAINING_RESULT_DELETE = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +50,14 @@ public class DisplayStoreDataActivity extends Activity {
 		setContentView(R.layout.activity_display_store_data);
 
 		datasource = new TrainerDataSource(this);
-		Log.d("ON CREATE", "datasource");
 		datasource.open();
-
-//		ArrayList<Training> trainingList = new ArrayList<Training>();
-//		Training training = new Training("Hintern", 10, 3, null);
-//		trainingList.add(training);
-//		training = new Training("Arme", 13, 4, null);
-//		trainingList.add(training);
 		
 		ArrayList<Training> trainingList = datasource.getAllTrainings();
-		Log.d("ON CREATE", "trainingList");
 
 		// create an ArrayAdaptar from the String Array
 		 dataAdapter = new TrainingAdapter(this,
 		 trainingList);
+		 
 
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		Log.d("ON CREATE", "listView " + listView);
@@ -126,7 +120,20 @@ public class DisplayStoreDataActivity extends Activity {
 						.findViewById(R.id.practice_type);
 				parctice_type.setText(training.getPracticeType());
 			}
+			if(resultCode ==TRAINING_RESULT_DELETE){
+				// read the bundle and get the country object
+				Bundle bundle = data.getExtras();
+				Training training = bundle.getParcelable("training");
+				datasource.open();
+				datasource.deleteTraining(training);
+				datasource.close();
+				Log.d("UPDATE TRAINING", "update training");
+				// update the country object in the ArrayAdapter
+				int listPosition = training.getListPosition();
+				// dataAdapter.setTraining(training, listPosition);
+			}
 			break;
+			
 		}
 	}
 
@@ -203,8 +210,7 @@ public class DisplayStoreDataActivity extends Activity {
 															.getText()
 															.toString()),
 											Integer.parseInt(input_amount
-													.getText().toString()),
-													new Date().toString());
+													.getText().toString()));
 									dataAdapter.add(training);
 								}
 							})
