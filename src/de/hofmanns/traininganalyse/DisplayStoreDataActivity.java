@@ -42,7 +42,7 @@ public class DisplayStoreDataActivity extends Activity {
 	private View currentView = null;
 
 	private static final int TRAINING_EDIT = 1;
-	private final int TRAINING_RESULT_DELETE = 2;
+	private final int RESULT_DELETE = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +51,11 @@ public class DisplayStoreDataActivity extends Activity {
 
 		datasource = new TrainerDataSource(this);
 		datasource.open();
-		
+
 		ArrayList<Training> trainingList = datasource.getAllTrainings();
 
 		// create an ArrayAdaptar from the String Array
-		 dataAdapter = new TrainingAdapter(this,
-		 trainingList);
-		 
+		dataAdapter = new TrainingAdapter(this, trainingList);
 
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		Log.d("ON CREATE", "listView " + listView);
@@ -70,11 +68,11 @@ public class DisplayStoreDataActivity extends Activity {
 					int position, long id) {
 
 				currentView = view;
-				 
 
 				// get reference to the training Object
 				Training training = (Training) view.getTag();
-				Log.d("TRAINING", "Selected Training = {" + training.toString() + " }");
+				Log.d("TRAINING", "Selected Training = {" + training.toString()
+						+ " }");
 				Toast.makeText(getApplicationContext(),
 						training.getPracticeType(), Toast.LENGTH_SHORT).show();
 
@@ -94,7 +92,6 @@ public class DisplayStoreDataActivity extends Activity {
 
 	}
 
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -109,7 +106,6 @@ public class DisplayStoreDataActivity extends Activity {
 				datasource.open();
 				datasource.updateTraining(training);
 				datasource.close();
-				Log.d("UPDATE TRAINING", "update training");
 				// update the country object in the ArrayAdapter
 				int listPosition = training.getListPosition();
 				// dataAdapter.setTraining(training, listPosition);
@@ -120,23 +116,26 @@ public class DisplayStoreDataActivity extends Activity {
 						.findViewById(R.id.practice_type);
 				parctice_type.setText(training.getPracticeType());
 			}
-			if(resultCode ==TRAINING_RESULT_DELETE){
+			if (resultCode == RESULT_DELETE) {
 				// read the bundle and get the country object
 				Bundle bundle = data.getExtras();
 				Training training = bundle.getParcelable("training");
+				Log.d("DELETE TRAINING", "training "+training);
 				datasource.open();
 				datasource.deleteTraining(training);
-				datasource.close();
 				Log.d("UPDATE TRAINING", "update training");
 				// update the country object in the ArrayAdapter
-				int listPosition = training.getListPosition();
-				// dataAdapter.setTraining(training, listPosition);
+				ArrayList<Training> trainingList = datasource.getAllTrainings();
+				datasource.close();
+				dataAdapter = new TrainingAdapter(this, trainingList);
+//				dataAdapter = new ArrayAdapter<Data>(this, android.R.layout.simple_list_item_1, classid)
+				ListView listView = (ListView) findViewById(R.id.listView1);
+				listView.setAdapter(dataAdapter);
 			}
 			break;
-			
+
 		}
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

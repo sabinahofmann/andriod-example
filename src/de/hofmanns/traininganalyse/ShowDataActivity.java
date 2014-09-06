@@ -24,6 +24,7 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 	private Training training;
 	private TextView type, created_at;
 	private EditText practiceType, rates, amount;
+	public static final int RESULT_DELETE    = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,10 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 
 		Button save = (Button) findViewById(R.id.save);
 		Button cancel = (Button) findViewById(R.id.cancel);
+		Button delete = (Button) findViewById(R.id.delete);
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
+		delete.setOnClickListener(this);
 
 
 		type  = (TextView)findViewById(R.id.type);		
@@ -76,13 +79,18 @@ public class ShowDataActivity extends Activity implements OnClickListener {
 			break;
 		
 		case R.id.delete:
+			Log.d("CLICK", "Button click delete "+ R.id.delete);
 			training.setPracticeType(practiceType.getText().toString());
 			training.setRates(Integer.parseInt(rates.getText().toString()));
 			training.setAmount(Integer.parseInt(amount.getText().toString()));
 			training.setCreated_at(created_at.getText().toString());
 
-			intent.putExtra("training", training);
-			setResult(2, intent);
+			Log.d("CLICK", "Button delete training "+training);
+			
+			Bundle b_delete = new Bundle();
+			b_delete.putParcelable("training", training);
+			intent.putExtras(b_delete);
+			setResult(RESULT_DELETE , intent);
 			finish();
 			break;
 
