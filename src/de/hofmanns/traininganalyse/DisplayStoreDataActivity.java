@@ -71,21 +71,16 @@ public class DisplayStoreDataActivity extends Activity {
 
 				// get reference to the training Object
 				Training training = (Training) view.getTag();
-				Log.d("TRAINING", "Selected Training = {" + training.toString()
-						+ " }");
 				Toast.makeText(getApplicationContext(),
 						training.getPracticeType(), Toast.LENGTH_SHORT).show();
 
 				Intent intent = new Intent(DisplayStoreDataActivity.this,
 						ShowDataActivity.class);
-				Log.d("TRAINING", "intent");
 				Bundle b = new Bundle();
 				// pass the training object as a parcel
 				b.putParcelable("training", training);
-				Log.d("TRAINING", " pass the training object as a parcel");
 				intent.putExtras(b);
 				startActivityForResult(intent, TRAINING_EDIT);
-				Log.d("TRAINING", "startActivityForResult");
 
 			}
 		});
@@ -128,7 +123,6 @@ public class DisplayStoreDataActivity extends Activity {
 				ArrayList<Training> trainingList = datasource.getAllTrainings();
 				datasource.close();
 				dataAdapter = new TrainingAdapter(this, trainingList);
-//				dataAdapter = new ArrayAdapter<Data>(this, android.R.layout.simple_list_item_1, classid)
 				ListView listView = (ListView) findViewById(R.id.listView1);
 				listView.setAdapter(dataAdapter);
 			}

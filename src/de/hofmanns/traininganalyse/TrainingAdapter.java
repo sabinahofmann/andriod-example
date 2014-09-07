@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import de.hofmanns.traininganalyse.databse.Training;
 
@@ -37,7 +38,9 @@ public class TrainingAdapter extends ArrayAdapter<Training> {
 		}
 		TextView practice_type = (TextView) rowView
 				.findViewById(R.id.practice_type);
-		TextView rates = (TextView) rowView.findViewById(R.id.rates);
+		TextView rates = (TextView) rowView.findViewById(R.id.rates);	
+		CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.checkBox1);
+
 
 		Training training = trainingList.get(position);
 		training.setListPosition(position);
@@ -45,8 +48,10 @@ public class TrainingAdapter extends ArrayAdapter<Training> {
 		practice_type.setText(training.getPracticeType());
 		rates.setText(Integer.toString(training.getRates()));
 
+		
 		Log.d("ON CREATE", "training practice_type and rates ");
-
+		
+		rowView.setTag(checkBox);
 		rowView.setTag(training);
 
 		Log.d("ON CREATE", "convertView " + rowView);
